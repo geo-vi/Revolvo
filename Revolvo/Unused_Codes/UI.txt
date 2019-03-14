@@ -1,0 +1,12 @@
+﻿/// LOGO ROTATION ///
+
+        private void logoRotation_Tick(object sender, EventArgs e)
+        {
+            var addedAngle = RotationAngle + (int)(0.1 * logoRotation.Interval);
+            if (addedAngle >= 360) addedAngle = 0;
+            logoRotation.Interval = (int)(addedAngle / 10) + 10;
+
+            _Revolvo = RevolvoImg.RotateImage(Revolvo, addedAngle);
+            RotationAngle = addedAngle;
+            map.Refresh();
+        }

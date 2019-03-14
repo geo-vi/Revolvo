@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Revolvo.ProxyFilters;
+using RevolvoCore.Networking;
+
+namespace Revolvo.Main
+{
+    /// <summary>
+    /// Main controller of the application.
+    /// </summary>
+    internal sealed class MainController
+    {
+        /// <summary>
+        /// Ultra singleton pattern.
+        /// I prefer it over static methods.
+        /// </summary>
+        public static MainController Instance { get; } = new MainController();
+
+        /// <summary>
+        /// Main proxy. Used to replace maps.php mainly
+        /// </summary>
+        private XProxy _proxy;
+
+        public int _mapId = 0;
+
+        public void Init()
+        {
+            // Proxy to decrypt DO https
+            _proxy = new XProxy(true);
+            _proxy.ProxyFilters.Add(new MapsFilter());
+            _proxy.ProxyFilters.Add(new InternalMapFilter());
+            _proxy.Start();
+
+            // Gets the client connection
+            GetClientConnection();
+            ServerLoop();
+        }
+
+        private XSocket PolicyClient;
+        private XSocket GameClient;
+
+        private void GetClientConnection()
+        {
+            var policyServer = new XSocket(843);
+            policyServer.OnAccept += (sender, args) =>
+            {
+                Console.WriteLine("PolicyServer connection received!");
+                var policyConnection = args.XSocket;
+                policyConnection.OnReceive += (o, eventArgs) =>
+                {
+                    var p = ((StringArgs) eventArgs).Packet;
+                    Console.WriteLine("Received: " + p);
+                    if (PolicyServer != null)
+                        PolicyServer.Write(p);
+                    else PolicyClient.Close();
+                };
+                policyConnection.Read(true);
+                PolicyClient = policyConnection;
+            };
+            policyServer.Listen();
+
+            var gameServer = new XSocket(8080);
+            gameServer.OnAccept += (sender, args) =>
+            {
+                Console.WriteLine("GameServer connection received");
+                var gameConnection = args.XSocket;
+                gameConnection.OnReceive += (o, eventArgs) =>
+                {
+                    Console.WriteLine("Received packet");
+                };
+                gameServer.Read();
+            };
+            gameServer.Listen();
+        }
+
+        private void ServerLoop()
+        {
+            while (_mapId == 0 || Bot.Bot.StorageManager.Spacemaps.Count != _mapId) { }
+            CreateServerConnection(Bot.Bot.StorageManager.Spacemaps[_mapId].IP);
+        }
+
+        private XSocket PolicyServer;
+        private XSocket GameServer;
+
+        private void CreateServerConnection(string ip)
+        {
+            var policyClient = new XSocket(ip, 843);
+            policyClient.OnReceive += (o, eventArgs) =>
+            {
+                var p = ((StringArgs)eventArgs).Packet;
+                Console.WriteLine("Received: " + p);
+                PolicyClient.Write(p);
+            };
+            policyClient.ConnectionClosedEvent += (o, eventArgs) =>
+            {
+                PolicyServer = null;
+                //GameServer = new XSocket(ip, 8080);
+                //GameServer.Connect();
+                //GameServer.Read();
+            };
+            policyClient.Connect();
+            policyClient.Read(true);
+            PolicyServer = policyClient;
+        }
+    }
+}

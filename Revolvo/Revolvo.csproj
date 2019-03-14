@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{404D7E67-CE47-4C2D-9D4D-93C77F82946D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Revolvo</RootNamespace>
+    <AssemblyName>Revolvo</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FiddlerCore4, Version=4.6.20171.13571, Culture=neutral, PublicKeyToken=67cb91587178ac5a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\FiddlerCore4.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bot\managers\StorageManager.cs" />
+    <Compile Include="Bot\netty\handlers\IHandler.cs" />
+    <Compile Include="Bot\netty\handlers\TestHandler.cs" />
+    <Compile Include="Bot\netty\Packet.cs" />
+    <Compile Include="Bot\netty\packet\Builder.cs" />
+    <Compile Include="Bot\netty\packet\Handler.cs" />
+    <Compile Include="Bot\objects\Character.cs" />
+    <Compile Include="Bot\objects\PlayerInstance.cs" />
+    <Compile Include="Bot\objects\Spacemap.cs" />
+    <Compile Include="Bot\objects\Vector.cs" />
+    <Compile Include="Loader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Loader.Designer.cs">
+      <DependentUpon>Loader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\CommandMonitor.cs" />
+    <Compile Include="Main\Global.cs" />
+    <Compile Include="Main\global_commands\Command.cs" />
+    <Compile Include="Main\global_commands\Test.cs" />
+    <Compile Include="Main\global_commands\ToggleLog.cs" />
+    <Compile Include="Main\global_objects\IClient.cs" />
+    <Compile Include="Main\global_objects\IServer.cs" />
+    <Compile Include="Main\global_objects\PacketDestinations.cs" />
+    <Compile Include="Main\global_objects\User.cs" />
+    <Compile Include="Main\MainController.cs" />
+    <Compile Include="Networking\local_servers\GameServer.cs" />
+    <Compile Include="Networking\local_servers\PolicyServer.cs" />
+    <Compile Include="Networking\remote_servers\GameClient.cs" />
+    <Compile Include="Networking\remote_servers\PolicyClient.cs" />
+    <Compile Include="OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Visuals.cs" />
+    <Compile Include="ProxyFilters\InternalMapFilter.cs" />
+    <Compile Include="ProxyFilters\MapsFilter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\DragAndDrop.cs" />
+    <Compile Include="UI\ExtendedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\LogoRotation.cs" />
+    <Compile Include="UI\Map.cs" />
+    <Compile Include="UI\map\Draw.cs" />
+    <Compile Include="UI\map\IPaintable.cs" />
+    <Compile Include="UI\map\objects\Asset.cs" />
+    <Compile Include="UI\map\objects\Collectable.cs" />
+    <Compile Include="UI\map\objects\Enemy.cs" />
+    <Compile Include="UI\map\objects\Npc.cs" />
+    <Compile Include="UI\map\objects\Resource.cs" />
+    <Compile Include="UI\Notification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Notification.Designer.cs">
+      <DependentUpon>Notification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Slider.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Slider.Designer.cs">
+      <DependentUpon>Slider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tab.cs" />
+    <Compile Include="Utils\KeyHandler.cs" />
+    <Compile Include="Utils\Output.cs" />
+    <Compile Include="Utils\RevolvoImg.cs" />
+    <EmbeddedResource Include="Loader.resx">
+      <DependentUpon>Loader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Notification.resx">
+      <DependentUpon>Notification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Slider.resx">
+      <DependentUpon>Slider.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Revolvo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bot\controllers\" />
+    <Folder Include="Main\global_managers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RevolvoCore\RevolvoCore.csproj">
+      <Project>{a30407fc-e876-4296-a076-1462539b9fa9}</Project>
+      <Name>RevolvoCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\error.png" />
+    <Content Include="Resources\home.png" />
+    <Content Include="Resources\icon.png" />
+    <Content Include="Resources\options.png" />
+    <Content Include="Resources\revolvo_cut.png" />
+    <Content Include="Resources\settings.png" />
+    <Content Include="Resources\tick.png" />
+    <Content Include="Unused_Codes\MainController.txt" />
+    <Content Include="Unused_Codes\UI.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
