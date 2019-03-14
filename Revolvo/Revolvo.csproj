@@ -80,6 +80,7 @@
     <Compile Include="Main\global_commands\Command.cs" />
     <Compile Include="Main\global_commands\Test.cs" />
     <Compile Include="Main\global_commands\ToggleLog.cs" />
+    <Compile Include="Main\global_objects\Defaults.cs" />
     <Compile Include="Main\global_objects\IClient.cs" />
     <Compile Include="Main\global_objects\IServer.cs" />
     <Compile Include="Main\global_objects\PacketDestinations.cs" />

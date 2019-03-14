@@ -15,5 +15,19 @@ namespace Revolvo.Bot.managers
         /// </summary>
         public static ConcurrentDictionary<int, Spacemap> Spacemaps = new ConcurrentDictionary<int, Spacemap>();
 
+        /// <summary>
+        /// Getting the server's ip
+        /// </summary>
+        /// <returns></returns>
+        public static string GetIP()
+        {
+            if (!Spacemaps.IsEmpty)
+            {
+                return Spacemaps.FirstOrDefault().Value.IP;
+            }
+
+            return "127.0.0.1"; // default localhost return for no exceptions.
+        }
+
     }
 }

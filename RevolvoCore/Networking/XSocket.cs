@@ -311,6 +311,8 @@ namespace RevolvoCore.Networking
             try
             {
                 _socket.EndConnect(ar);
+                OnConnectEnd();
+
                 _connectedEvent.Set();
             }
             catch (Exception e)
@@ -401,6 +403,9 @@ namespace RevolvoCore.Networking
             OnAccept?.Invoke(this, new XSocketArgs(xSocket));
         }
 
+        /// <summary>
+        /// When the server's connection gets closed / lost
+        /// </summary>
         public event EventHandler<EventArgs> ConnectionClosedEvent;
 
         protected virtual void OnConnectionClosed()
@@ -421,6 +426,17 @@ namespace RevolvoCore.Networking
         protected virtual void OnReceiveData(string packet)
         {
             OnReceive?.Invoke(this, new StringArgs(packet));
+        }
+
+
+        /// <summary>
+        /// Gets called 
+        /// </summary>
+        public event EventHandler<EventArgs> OnConnected;
+
+        protected virtual void OnConnectEnd()
+        {
+            OnConnected?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

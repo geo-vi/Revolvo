@@ -9,6 +9,7 @@ using Revolvo.Main.global_objects;
 using Revolvo.Bot.managers;
 using RevolvoCore.Encryption;
 using System.Threading;
+using Revolvo.Networking.local_servers;
 
 namespace Revolvo.Main
 {
@@ -49,10 +50,11 @@ namespace Revolvo.Main
 
         private void InitiateConnection()
         {
-            while (StorageManager.Spacemaps.Count != MapId || MapId == 0) {  }
-            var server = new Main.global_objects.IServer(StorageManager.Spacemaps[MapId].IP, 843, true);
-            server.Connected += (s, e) => User = new User(new Main.global_objects.IClient(843, true), server);
-            server.Connect();
+            new PolicyServer(Defaults.DEFAULT_POLICY_PORT);
+            //while (StorageManager.Spacemaps.Count != MapId || MapId == 0) {  }
+            //var server = new Main.global_objects.IServer(StorageManager.Spacemaps[MapId].IP, 843, true);
+            //server.Connected += (s, e) => User = new User(new Main.global_objects.IClient(843, true), server);
+            //server.Connect();
         }
 
         private void GetClientConnection()

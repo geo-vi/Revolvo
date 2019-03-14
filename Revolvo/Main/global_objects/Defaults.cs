@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revolvo.Networking.local_servers
+namespace Revolvo.Main.global_objects
 {
-    class GameServer
+    class Defaults
     {
-
+        public const short DEFAULT_POLICY_PORT = 843;
     }
 }
