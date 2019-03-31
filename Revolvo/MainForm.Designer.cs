@@ -50,6 +50,7 @@
             this.map.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.map.TabIndex = 0;
             this.map.TabStop = false;
+            this.map.Click += new System.EventHandler(this.map_Click);
             this.map.Paint += new System.Windows.Forms.PaintEventHandler(this.PaintMap);
             // 
             // mapTimer

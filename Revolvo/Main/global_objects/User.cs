@@ -29,21 +29,21 @@ namespace Revolvo.Main.global_objects
         {
             if (destination == PacketDestinations.CLIENT_TO_SERVER)
             {
-                Debug.WriteLine("CLIENT->SERVER");
-                Client.XSocket.Write(bytes);
+                Console.WriteLine("CLIENT->SERVER");
+                Server.XSocket.Write(bytes);
             }
             else
             {
-                Debug.WriteLine("SERVER->CLIENT");
-                Server.XSocket.Write(bytes);
+                Console.WriteLine("SERVER->CLIENT");
+                Client.XSocket.Write(bytes);
             }
         }
 
         public void RedirectPacket(PacketDestinations destination, string content)
         {
             if (destination == PacketDestinations.CLIENT_TO_SERVER)
-                Client.XSocket.Write(content);
-            else Server.XSocket.Write(content);
+                Server.XSocket.Write(content);
+            else Client.XSocket.Write(content);
         }
 
         public void Close(Senders sender)

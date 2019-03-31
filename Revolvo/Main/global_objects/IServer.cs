@@ -28,13 +28,13 @@ namespace Revolvo.Main.global_objects
         {
             XSocket.Connect();
             Connected?.Invoke(this, EventArgs.Empty);
-            Console.WriteLine("Connected to server");
+            Console.WriteLine("IServer: Connected to game server");
             XSocket.Read(PacketStream);
         }
 
         private void XSocket_ConnectionClosedEvent(object sender, EventArgs e)
         {
-           
+            Console.WriteLine("IServer: Disconnected from the game server");
         }
 
         private void XSocket_OnReceive(object sender, EventArgs e)

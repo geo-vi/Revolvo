@@ -36,7 +36,7 @@ namespace Revolvo
         public Image Revolvo => RevolvoImg.ScaleImage(Properties.Resources.icon, 83, 85);
 
         #region Temp variables
-        private bool Connected = false;
+        public static bool Connected = false;
         #endregion
 
         #region Map
@@ -198,5 +198,10 @@ namespace Revolvo
             Notification.Custom(this, "To switch tabs press [END]");
         }
         #endregion
+
+        private void map_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

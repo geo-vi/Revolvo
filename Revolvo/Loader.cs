@@ -41,7 +41,7 @@ namespace Revolvo
                 Console.WriteLine("Download completed.");
                 ChecksumSWF();
             };
-            client.DownloadFileAsync(new Uri("http://beta.univ3rse.com/spacemap/main.swf"), Directory.GetCurrentDirectory() + "/main.swf");
+            client.DownloadFileAsync(new Uri("http://play.univ3rse.com/spacemap/main.swf"), Directory.GetCurrentDirectory() + "/main.swf");
         }
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -141,6 +141,11 @@ namespace Revolvo
         private void Loader_MouseDown(object sender, MouseEventArgs e)
         {
             DragAndDrop.Initiate(this, this, sender, e);
+        }
+
+        private void contentPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

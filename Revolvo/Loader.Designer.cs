@@ -63,6 +63,7 @@
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Size = new System.Drawing.Size(453, 237);
             this.contentPanel.TabIndex = 2;
+            this.contentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.contentPanel_Paint);
             // 
             // icon
             // 

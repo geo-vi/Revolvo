@@ -8,6 +8,7 @@ namespace Revolvo.Main.global_objects
 {
     class Defaults
     {
-        public const short DEFAULT_POLICY_PORT = 843;
+        public const short POLICY_PORT = 843;
+        public const short GAME_PORT = 8080;
     }
 }

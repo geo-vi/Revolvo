@@ -86,10 +86,6 @@
     <Compile Include="Main\global_objects\PacketDestinations.cs" />
     <Compile Include="Main\global_objects\User.cs" />
     <Compile Include="Main\MainController.cs" />
-    <Compile Include="Networking\local_servers\GameServer.cs" />
-    <Compile Include="Networking\local_servers\PolicyServer.cs" />
-    <Compile Include="Networking\remote_servers\GameClient.cs" />
-    <Compile Include="Networking\remote_servers\PolicyClient.cs" />
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>

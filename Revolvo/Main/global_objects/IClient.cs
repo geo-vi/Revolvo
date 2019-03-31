@@ -23,7 +23,7 @@ namespace Revolvo.Main.global_objects
         private void XSocket_OnAccept(object sender, XSocketArgs e)
         {
             XSocket = e.XSocket;
-            Console.WriteLine("Connection received [" + e.XSocket.IpEndPoint.Port + "]");
+            Console.WriteLine("IClient: Connection received [" + e.XSocket.IpEndPoint.Port + "]");
             XSocket.OnReceive += XSocket_OnReceive;
             XSocket.Read(PacketStream);
         }
