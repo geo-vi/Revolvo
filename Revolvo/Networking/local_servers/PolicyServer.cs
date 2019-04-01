@@ -56,10 +56,10 @@ namespace Revolvo.Networking.local_servers
             }
         }
 
-        public async Task Close()
+        public void Close()
         {
-            await _channel.CloseAsync();
-            await _threadGroup.ShutdownGracefullyAsync();
+            _channel.CloseAsync();
+            _threadGroup.ShutdownGracefullyAsync();
         }
     }
 }

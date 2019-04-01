@@ -24,11 +24,8 @@ namespace Revolvo.Networking.netty.policy
             gameServer.Listen();
 
             await _server.Write(msg);
-            Console.WriteLine("?");
-            await _server.Close();
-            Console.WriteLine("??");
+            _server.Close();
             await ctx.CloseAsync();
-            Console.WriteLine("???");
         }
     }
 }
