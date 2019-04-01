@@ -26,8 +26,19 @@ namespace Revolvo.Networking.remote_servers
 
         public void Connect()
         {
-            XSocket.Connect();
-            XSocket.Read();
+            try
+            {
+                Console.WriteLine("connecting to " + StorageManager.GetIP());
+                XSocket.Connect();
+                XSocket.Read();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("<EXCEPTION>");
+                Console.WriteLine(e);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void XSocket_ConnectionClosedEvent(object sender, EventArgs e)
