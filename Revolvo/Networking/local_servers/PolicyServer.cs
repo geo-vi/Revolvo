@@ -36,7 +36,7 @@ namespace Revolvo.Networking.local_servers
                 .ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel =>
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
-                    pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyServerReceivedHandler());
+                    pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyServerReceivedHandler(this));
                 }));
 
             _channel = await bootstrap.BindAsync(Defaults.DEFAULT_POLICY_PORT);

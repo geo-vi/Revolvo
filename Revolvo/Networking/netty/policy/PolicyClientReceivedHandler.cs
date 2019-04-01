@@ -20,6 +20,7 @@ namespace Revolvo.Networking.netty.policy
         protected override void ChannelRead0(IChannelHandlerContext ctx, string msg)
         {
             _server.Write(msg);
+            Console.WriteLine(msg);
         }
     }
 }
