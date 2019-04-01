@@ -43,7 +43,7 @@ namespace Revolvo.Networking.remote_servers
                 .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
-                    pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyReceivedHandler(Server));
+                    pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyClientReceivedHandler(Server));
                 }));
 
             _channel = await bootstrap.ConnectAsync(ip, Defaults.DEFAULT_POLICY_PORT);

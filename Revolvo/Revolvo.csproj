@@ -134,7 +134,8 @@
     <Compile Include="Main\MainController.cs" />
     <Compile Include="Networking\local_servers\GameServer.cs" />
     <Compile Include="Networking\local_servers\PolicyServer.cs" />
-    <Compile Include="Networking\netty\policy\PolicyReceivedHandler.cs" />
+    <Compile Include="Networking\netty\policy\PolicyClientReceivedHandler.cs" />
+    <Compile Include="Networking\netty\policy\PolicyServerReceivedHandler.cs" />
     <Compile Include="Networking\remote_servers\GameClient.cs" />
     <Compile Include="Networking\remote_servers\PolicyClient.cs" />
     <Compile Include="Networking\UserSession.cs" />
