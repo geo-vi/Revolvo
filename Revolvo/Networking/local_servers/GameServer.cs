@@ -1,40 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Revolvo.Bot.netty;
+using DotNetty.Transport.Bootstrapping;
+using DotNetty.Transport.Channels;
+using DotNetty.Transport.Channels.Sockets;
 using Revolvo.Main.global_objects;
-using Revolvo.Networking.remote_servers;
-using RevolvoCore.Networking;
+using Revolvo.Networking.netty.policy;
 
 namespace Revolvo.Networking.local_servers
 {
     class GameServer
     {
-        //public XSocket XSocket { get; private set; }
+        private MultithreadEventLoopGroup _threadGroup;
+        private IChannel _channel;
 
-        //public GameServer()
-        //{
-        //    var xSocket = new XSocket(Defaults.DEFAULT_GAME_PORT);
-        //    xSocket.OnAccept += XSocket_OnAccept;
-        //    xSocket.Listen();
-        //}
+        public async void Listen()
+        {
+            _threadGroup = new MultithreadEventLoopGroup();
 
-        //private void XSocket_OnAccept(object sender, XSocketArgs e)
-        //{
-        //    XSocket = e.XSocket;
-        //    Console.WriteLine("Connection received [" + e.XSocket.IpEndPoint.Port + "]");
-        //    XSocket.OnReceive += XSocket_OnReceive;
-        //    XSocket.ConnectionClosedEvent += delegate { Console.WriteLine("closed?"); };
-        //    XSocket.Read();
-        //    Console.WriteLine("Ready GameServer");
-        //}
+            var bootstrap = new Bootstrap();
+            bootstrap
+                .Group(_threadGroup)
+                .Channel<SocketDatagramChannel>()
+                .Option(ChannelOption.SoBroadcast, true)
+                .Handler(new ActionChannelInitializer<IChannel>(channel =>
+                {
+                    channel.Pipeline.AddLast("Game", new GameServerHandler());
+                }));
 
-        //private void XSocket_OnReceive(object sender, EventArgs e)
-        //{
-        //    var args = (ByteArrayArgs)e;
-        //    Packet.Handler.HandleGameServerBytes(args.ByteArray);
-        //}
+            _channel = await bootstrap.BindAsync(Defaults.DEFAULT_GAME_PORT);
+        }
+
+        public async Task Write(string msg)
+        {
+            try
+            {
+                await _channel.WriteAndFlushAsync(msg);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        public async Task Close()
+        {
+            await _channel.CloseAsync();
+            await _threadGroup.ShutdownGracefullyAsync();
+        }
     }
 }

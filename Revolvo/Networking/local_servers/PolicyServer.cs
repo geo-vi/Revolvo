@@ -8,6 +8,7 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Revolvo.Bot.netty;
+using Revolvo.Main;
 using Revolvo.Main.global_objects;
 using Revolvo.Networking.netty.policy;
 using Revolvo.Networking.remote_servers;

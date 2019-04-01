@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
+using Revolvo.Main;
 using Revolvo.Networking.local_servers;
 
 namespace Revolvo.Networking.netty.policy
@@ -19,9 +20,15 @@ namespace Revolvo.Networking.netty.policy
 
         protected override async void ChannelRead0(IChannelHandlerContext ctx, string msg)
         {
+            var gameServer = MainController.Instance.Session.GameServer = new GameServer();
+            gameServer.Listen();
+
             await _server.Write(msg);
+            Console.WriteLine("?");
             await _server.Close();
+            Console.WriteLine("??");
             await ctx.CloseAsync();
+            Console.WriteLine("???");
         }
     }
 }
