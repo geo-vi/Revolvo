@@ -43,7 +43,7 @@ namespace Revolvo.Networking.local_servers
 
         }
 
-        public async void Write(string msg)
+        public async Task Write(string msg)
         {
             try
             {
@@ -55,11 +55,10 @@ namespace Revolvo.Networking.local_servers
             }
         }
 
-        public void Close()
+        public async Task Close()
         {
-            _channel.CloseAsync();
-            _threadGroup.ShutdownGracefullyAsync();
-            Console.WriteLine("CLOSED");
+            await _channel.CloseAsync();
+            await _threadGroup.ShutdownGracefullyAsync();
         }
     }
 }
