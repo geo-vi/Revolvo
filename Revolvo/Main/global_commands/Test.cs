@@ -21,7 +21,7 @@ namespace Revolvo.Main.global_commands
             //    Console.Beep(800,90);
             //    await Task.Delay(50);
             //}
-            MainController.Instance.Session.GameServer.XSocket.Write(LegacyModule.write("0|A|STD|test").Bytes);
+            //MainController.Instance.Session.GameServer.XSocket.Write(LegacyModule.write("0|A|STD|test").Bytes);
             Debug.WriteLine("tested");
         }
     }

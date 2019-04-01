@@ -24,11 +24,11 @@ namespace Revolvo.Bot.netty.handlers
 
             var client = new GameClient();
             MainController.Instance.Session.GameClient = client;
-            client.XSocket.OnConnected += delegate
-            {
-                MainController.Instance.Session.TryRedirectToGameClient(bytes);
-            };
-            client.Connect();
+            //client.XSocket.OnConnected += delegate
+            //{
+            //    MainController.Instance.Session.TryRedirectToGameClient(bytes);
+            //};
+            //client.Connect();
 
         }
     }

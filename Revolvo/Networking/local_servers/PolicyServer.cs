@@ -28,11 +28,12 @@ namespace Revolvo.Networking.local_servers
         public async void Listen()
         {
             _threadGroup = new MultithreadEventLoopGroup();
+
             var bootstrap = new ServerBootstrap();
             bootstrap
                 .Group(_threadGroup)
                 .Channel<TcpServerSocketChannel>()
-                .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
+                .ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel =>
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
                     pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyServerReceivedHandler());

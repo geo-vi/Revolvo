@@ -11,7 +11,7 @@ namespace Revolvo.Networking.netty.policy
     {
         protected override void ChannelRead0(IChannelHandlerContext ctx, string msg)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(msg);
         }
     }
 }
