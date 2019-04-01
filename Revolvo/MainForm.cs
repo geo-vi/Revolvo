@@ -6,6 +6,8 @@ using Revolvo.UI.map;
 using Revolvo.UI;
 using Revolvo.Main;
 using System.Threading.Tasks;
+using Revolvo.Bot.managers;
+using Revolvo.Bot.objects;
 
 namespace Revolvo
 {
@@ -36,7 +38,7 @@ namespace Revolvo
         public Image Revolvo => RevolvoImg.ScaleImage(Properties.Resources.icon, 83, 85);
 
         #region Temp variables
-        private bool Connected = false;
+        private bool Connected => MainController.Instance.Session.Connection && MainController.Instance.Player != null;
         #endregion
 
         #region Map
@@ -49,9 +51,12 @@ namespace Revolvo
             if (!Connected)
             {
                 Draw.Logo(LogoRotation.Logo, e);
-                Draw.MapText("PENDING", e);
                 return;
             }
+            Draw.MapText(StorageManager.CurrentSpacemap.Name, e);
+            Draw.PlayerInfo(e);
+            Draw.Position(e);
+            Draw.MapAssets(e);
             //TODO:: ADD
         }
 
@@ -85,6 +90,20 @@ namespace Revolvo
 
             LogoRotation.Rotate(Revolvo, RotationSpeed);
         }
+
+        private void map_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!Connected) return;
+            var a = e.Location;
+            var newX = a.X * 52;
+            var newY = (int)(a.Y * 42.66666666666667);
+
+            var newPos = new Vector(newX, newY);
+
+            MainController.Instance.Player.Move(newPos);
+
+        }
+
         #endregion
 
         #region Form Utils
@@ -196,6 +215,11 @@ namespace Revolvo
         private void helpBttn_Click(object sender, EventArgs e)
         {
             Notification.Custom(this, "To switch tabs press [END]");
+        }
+
+        public void openMenu_Click(object sender, EventArgs e)
+        {
+            Tab.HandleKey(this, this, sender, new KeyEventArgs(Keys.Tab));
         }
         #endregion
     }

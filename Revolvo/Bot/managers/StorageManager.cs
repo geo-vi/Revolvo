@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Revolvo.Main;
 
 namespace Revolvo.Bot.managers
 {
@@ -14,6 +15,8 @@ namespace Revolvo.Bot.managers
         /// Game server spacemaps
         /// </summary>
         public static ConcurrentDictionary<int, Spacemap> Spacemaps = new ConcurrentDictionary<int, Spacemap>();
+
+        public static Spacemap CurrentSpacemap => Spacemaps[MainController.Instance.MapId];
 
         /// <summary>
         /// Getting the server's ip
@@ -28,6 +31,5 @@ namespace Revolvo.Bot.managers
 
             return "127.0.0.1"; // default localhost return for no exceptions.
         }
-
     }
 }

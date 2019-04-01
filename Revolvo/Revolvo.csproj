@@ -53,13 +53,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bot\controllers\MovementController.cs" />
     <Compile Include="Bot\managers\StorageManager.cs" />
     <Compile Include="Bot\netty\handlers\IHandler.cs" />
-    <Compile Include="Bot\netty\handlers\TestHandler.cs" />
+    <Compile Include="Bot\netty\handlers\legacy\CreateCollectableHandler.cs" />
+    <Compile Include="Bot\netty\handlers\legacy\CreatePortalHandler.cs" />
+    <Compile Include="Bot\netty\handlers\legacy\ILegacyHandler.cs" />
+    <Compile Include="Bot\netty\handlers\MoveCommandHandler.cs" />
+    <Compile Include="Bot\netty\handlers\MoveRequestHandler.cs" />
+    <Compile Include="Bot\netty\handlers\ShipInitializationHandler.cs" />
+    <Compile Include="Bot\netty\handlers\VersionHandler.cs" />
     <Compile Include="Bot\netty\Packet.cs" />
     <Compile Include="Bot\netty\packet\Builder.cs" />
     <Compile Include="Bot\netty\packet\Handler.cs" />
     <Compile Include="Bot\objects\Character.cs" />
+    <Compile Include="Bot\objects\map\Collectable.cs" />
+    <Compile Include="Bot\objects\map\Jumpgate.cs" />
+    <Compile Include="Bot\objects\map\Station.cs" />
     <Compile Include="Bot\objects\PlayerInstance.cs" />
     <Compile Include="Bot\objects\Spacemap.cs" />
     <Compile Include="Bot\objects\Vector.cs" />
@@ -81,15 +91,12 @@
     <Compile Include="Main\global_commands\Test.cs" />
     <Compile Include="Main\global_commands\ToggleLog.cs" />
     <Compile Include="Main\global_objects\Defaults.cs" />
-    <Compile Include="Main\global_objects\IClient.cs" />
-    <Compile Include="Main\global_objects\IServer.cs" />
-    <Compile Include="Main\global_objects\PacketDestinations.cs" />
-    <Compile Include="Main\global_objects\User.cs" />
     <Compile Include="Main\MainController.cs" />
     <Compile Include="Networking\local_servers\GameServer.cs" />
     <Compile Include="Networking\local_servers\PolicyServer.cs" />
     <Compile Include="Networking\remote_servers\GameClient.cs" />
     <Compile Include="Networking\remote_servers\PolicyClient.cs" />
+    <Compile Include="Networking\UserSession.cs" />
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +110,7 @@
     </Compile>
     <Compile Include="Properties\Visuals.cs" />
     <Compile Include="ProxyFilters\InternalMapFilter.cs" />
+    <Compile Include="ProxyFilters\MainFilter.cs" />
     <Compile Include="ProxyFilters\MapsFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,11 +122,9 @@
     <Compile Include="UI\Map.cs" />
     <Compile Include="UI\map\Draw.cs" />
     <Compile Include="UI\map\IPaintable.cs" />
-    <Compile Include="UI\map\objects\Asset.cs" />
-    <Compile Include="UI\map\objects\Collectable.cs" />
-    <Compile Include="UI\map\objects\Enemy.cs" />
-    <Compile Include="UI\map\objects\Npc.cs" />
-    <Compile Include="UI\map\objects\Resource.cs" />
+    <Compile Include="UI\map\objects\AssetPaint.cs" />
+    <Compile Include="UI\map\objects\CollectablePaint.cs" />
+    <Compile Include="UI\map\objects\CharacterPaint.cs" />
     <Compile Include="UI\Notification.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,7 @@
     <Compile Include="Utils\KeyHandler.cs" />
     <Compile Include="Utils\Output.cs" />
     <Compile Include="Utils\RevolvoImg.cs" />
+    <Compile Include="Utils\XReflect.cs" />
     <EmbeddedResource Include="Loader.resx">
       <DependentUpon>Loader.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,7 +176,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Bot\controllers\" />
     <Folder Include="Main\global_managers\" />
   </ItemGroup>
   <ItemGroup>

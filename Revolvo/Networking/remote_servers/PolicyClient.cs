@@ -16,8 +16,6 @@ namespace Revolvo.Networking.remote_servers
     {
         public XSocket XSocket { get; }
 
-        public event EventHandler<EventArgs> Connected;
-
         private PolicyServer Server;
 
         public PolicyClient(PolicyServer server)
@@ -42,11 +40,14 @@ namespace Revolvo.Networking.remote_servers
 
         private void XSocket_OnReceive(object sender, EventArgs e)
         {
+            MainController.Instance.Session.GameServer = new GameServer();
             var args = (StringArgs)e;
             var packet = args.Packet;
             Server.XSocket.Write(packet);
+            Console.WriteLine(packet);
             Server.XSocket.Close();
-            
+            XSocket.Close();
+            //open the gameserver now.
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Revolvo.Bot.netty;
+using Revolvo.Main.global_objects;
 using Revolvo.Networking.remote_servers;
 using RevolvoCore.Networking;
 
@@ -13,9 +14,9 @@ namespace Revolvo.Networking.local_servers
     {
         public XSocket XSocket { get; private set; }
 
-        public PolicyServer(int port)
+        public PolicyServer()
         {
-            var xSocket = new XSocket(port);
+            var xSocket = new XSocket(Defaults.DEFAULT_POLICY_PORT);
 
             xSocket.OnAccept += XSocket_OnAccept;
             xSocket.Listen();

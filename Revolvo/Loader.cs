@@ -33,15 +33,16 @@ namespace Revolvo
 
         private void DownloadSWF()
         {
-            Console.WriteLine("Downloading main.swf");
-            WebClient client = new WebClient();
-            client.DownloadProgressChanged += Client_DownloadProgressChanged;
-            client.DownloadFileCompleted += (o, e) => 
-            {
-                Console.WriteLine("Download completed.");
-                ChecksumSWF();
-            };
-            client.DownloadFileAsync(new Uri("http://beta.univ3rse.com/spacemap/main.swf"), Directory.GetCurrentDirectory() + "/main.swf");
+            //Console.WriteLine("Downloading main.swf");
+            //WebClient client = new WebClient();
+            //client.DownloadProgressChanged += Client_DownloadProgressChanged;
+            //client.DownloadFileCompleted += (o, e) =>
+            //{
+            //    Console.WriteLine("Download completed.");
+            //    ChecksumSWF();
+            //};
+            //client.DownloadFileAsync(new Uri("http://beta.univ3rse.com/spacemap/main.swf"), Directory.GetCurrentDirectory() + "/maindownloaded.swf");
+            ChecksumSWF();
         }
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

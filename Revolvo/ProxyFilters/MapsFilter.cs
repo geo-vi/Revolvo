@@ -14,8 +14,6 @@ namespace Revolvo.ProxyFilters
     {
         public void BeforeRequest(Session session)
         {
-            //Console.WriteLine(session.hostname);
-
             if (session.HTTPMethodIs("CONNECT") &&
                 !session.hostname.Contains("play.univ3rse.com") &&
                 !session.PathAndQuery.Contains("maps.php"))
@@ -49,9 +47,11 @@ namespace Revolvo.ProxyFilters
             {
                 int spacemapId = 0;
                 string spacemapIP = "";
+                string spacemapName = "";
                 foreach (var attribute in xmlElement.Attributes())
                 {
                     if (attribute.Name.LocalName == "id") spacemapId = int.Parse(attribute.Value);
+                    else if (attribute.Name.LocalName == "name") spacemapName = attribute.Value;
                 }
                 foreach (var element in xmlElement.Elements())
                     if (element.Name.LocalName == "gameserverIP")
@@ -60,7 +60,7 @@ namespace Revolvo.ProxyFilters
                         element.ReplaceAll("127.0.0.1");
                     }
 
-                StorageManager.Spacemaps.TryAdd(spacemapId, new Spacemap(spacemapId, spacemapIP));
+                StorageManager.Spacemaps.TryAdd(spacemapId, new Spacemap(spacemapId, spacemapIP, spacemapName));
                 Console.WriteLine(@"map #{0} => {1}", spacemapId, spacemapIP);
             }
             return xml.ToString();

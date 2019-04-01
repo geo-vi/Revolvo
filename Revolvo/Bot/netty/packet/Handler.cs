@@ -14,6 +14,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Revolvo.Bot.netty.handlers.legacy;
+using Revolvo.Utils;
 using RevolvoCore.Commands;
 using RevolvoCore.Commands.requests;
 
@@ -21,73 +23,120 @@ namespace Revolvo.Bot.netty.packet
 {
     class Handler
     {
-        public Dictionary<short, IHandler> HandledClientCommands = new Dictionary<short, IHandler>();
-        public Dictionary<short, IHandler> HandledServerCommands = new Dictionary<short, IHandler>();
+        public Dictionary<short, IHandler> HandledCommands = new Dictionary<short, IHandler>();
+        public Dictionary<string, ILegacyHandler> HandledPackets = new Dictionary<string, ILegacyHandler>();
+        public Dictionary<short, string> ParsedCommandNames = new Dictionary<short, string>();
+
+        public Handler()
+        {
+            AddCommands();
+        }
 
         public void AddCommands()
         {
+            ParseAllCommands();
+            HandledCommands.Add(VersionRequest.ID, new VersionHandler());
+            HandledCommands.Add(ShipInitializationCommand.ID, new ShipInitializationHandler());
+            HandledCommands.Add(MoveCommand.ID, new MoveCommandHandler());
+            HandledCommands.Add(MoveRequest.ID, new MoveRequestHandler());
+            HandledPackets.Add("p", new CreatePortalHandler());
+            HandledPackets.Add("c", new CreateCollectableHandler());
         }
+
+        private void ParseAllCommands()
+        {
+            foreach (var reflectedClass in XReflect.GetTypesInNamespace(Assembly.GetAssembly(typeof(ByteParser)), 
+                "RevolvoCore.Commands"))
+            {
+                var id = XReflect.GetConstantCommandId(XReflect.GetConstants(reflectedClass));
+                var name = reflectedClass.Name;
+                if (id == 0 || name == "")
+                {
+                    Console.WriteLine("Error adding [" + id + ", " + name + "]");
+                    continue;
+                }
+                if (!ParsedCommandNames.ContainsKey(id))
+                { ParsedCommandNames.Add(id,name);}
+                else
+                {
+                    Console.WriteLine("Duplicate: " + id + " " + name + " || " + ParsedCommandNames[id]);
+                }
+            }
+        }
+
 
         /// <summary>
         /// TODO
         /// </summary>
         /// <param name="bytes"></param>
-        public void HandleServerCommand(byte[] bytes)
+        public void HandleGameClientBytes(byte[] bytes)
         {
             var parsed = new ByteParser(bytes);
-            //Console.WriteLine($"Received from Client (0.0.0.0)->{CommandFinder.Find(parsed.CMD_ID)}");
-            switch (parsed.CMD_ID)
+            var id = parsed.CMD_ID;
+            if (id <= 0 || parsed.Lenght <= 0 || bytes.Length < parsed.Lenght + 2)
             {
-                case ShipInitializationCommand.ID:
-                case 29052:
-                default:
-                    MainController.Instance.User.RedirectPacket(PacketDestinations.CLIENT_TO_SERVER, bytes);
-                    break;
-            }
-
-        }
-
-        public void HandleClientCommand(byte[] bytes)
-        {
-            var parsed = new ByteParser(bytes);
-            Console.WriteLine($"{parsed.CMD_ID}");
-            if (parsed.CMD_ID == 666)
-            {
-                MainController.Instance.User.RedirectPacket(PacketDestinations.CLIENT_TO_SERVER, ShipInitializationCommand.write(9001, "nigro", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, true, 1, 1, 1, 1, 1, 1, 1, "", 1, false, false, new List<VisualModifierCommand>()));
-                Console.WriteLine("STAY ALIIIIVE");
+                Console.WriteLine("Wrong length [" + parsed.Lenght + "] + " + parsed.CMD_ID);
                 return;
             }
+            var reformedBytes = new byte[parsed.Lenght + 2];
+            Array.Copy(bytes, reformedBytes, parsed.Lenght + 2);
+            parsed = new ByteParser(reformedBytes);
+            id = parsed.CMD_ID;
+            Console.WriteLine("Received: " + id + " [" + ParsedCommandNames[id] + "] - " + parsed.Lenght);
 
-            MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, bytes);
+            if (HandledCommands.ContainsKey(id))
+            {
+                HandledCommands[id].execute(reformedBytes);
+            }
+            else
+            {
+                if (id == LegacyModule.ID)
+                {
+                    var request = new LegacyModule();
+                    request.readCommand(bytes);
+                    if (request.message.Contains('|'))
+                    {
+                        var split = request.message.Split('|');
+                        if (HandledPackets.ContainsKey(split[1]))
+                        {
+                            HandledPackets[split[1]].execute(split);
+                        }
+                        else MainController.Instance.Session.TryRedirectToGameServer(reformedBytes);
+                    }
+                    else
+                    {
+                        if (HandledPackets.ContainsKey(request.message))
+                        {
+                            HandledPackets[request.message].execute(new[] { request.message });
+                        }
+                        else MainController.Instance.Session.TryRedirectToGameServer(reformedBytes);
+                    }
+                }
+                else MainController.Instance.Session.TryRedirectToGameServer(reformedBytes);
+            }
         }
 
-        /// - TILL HERE ///
-
-        public void HandlePolicyServer(string packet)
+        public void HandleGameServerBytes(byte[] bytes)
         {
-            Console.WriteLine("PolicyServer>" + packet);
-            MainController.Instance.User.RedirectPacket(PacketDestinations.CLIENT_TO_SERVER, packet);
-            MainController.Instance.User.Close(User.Senders.CLIENT);
-            MainController.Instance.User.Close(User.Senders.SERVER);
-            InitiateGame();
-        }
+            var parsed = new ByteParser(bytes);
+            var id = parsed.CMD_ID;
+            if (id < 0 || parsed.Lenght < 0)
+            {
+                Console.WriteLine("Wrong length");
+                return;
+            }
+            var reformedBytes = new byte[parsed.Lenght + 2];
+            Array.Copy(bytes, reformedBytes, parsed.Lenght + 2);
 
-        public void HandlePolicyClient(string packet)
-        {
-            Console.WriteLine("PolicyClient>" + packet);
-            MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, packet);
+            if (HandledCommands.ContainsKey(id))
+            {
+                HandledCommands[id].execute(reformedBytes);
+            }
+            else
+            {
+                MainController.Instance.Session.TryRedirectToGameClient(reformedBytes);
+            }
         }
-
-        private void InitiateGame()
-        {
-            var client = new IClient(8080);
-            var server = new IServer(Bot.managers.StorageManager.Spacemaps[MainController.Instance.MapId].IP, 8080);
-            server.Connected += (s, e) => MainController.Instance.User = new User(client, server);
-            server.Connect();
-            Console.WriteLine("Emulator started");
-            server.XSocket.Write(VersionRequest.write(9001, "cm3ed2ph4te3galk2jcs89k1ga"));
-
-            Console.WriteLine("Keeping client alive, waiting for incoming connection.");
-        }
+        
     }
 }

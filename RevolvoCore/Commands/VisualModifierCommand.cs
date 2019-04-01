@@ -1,6 +1,6 @@
 ﻿namespace RevolvoCore.Commands
 {
-    public class VisualModifierCommand : Command
+    public class VisualModifierCommand
     {
         public const short TRAVEL_MODE = 0;
 
@@ -102,14 +102,14 @@
             return cmd.Message.ToArray();
         }
 
-        public static byte[] write(int userId, short modifier, int attribute, bool activated)
+        public static Command write(int userId, short modifier, int attribute, bool activated)
         {
             var cmd = new ByteArray(ID);
             cmd.Integer(userId);
             cmd.Short(modifier);
             cmd.Integer(attribute);
             cmd.Boolean(activated);
-            return cmd.ToByteArray();
+            return new Command(cmd.ToByteArray(), false);
         }
     }
 }

@@ -330,10 +330,18 @@ namespace RevolvoCore.Networking
         {
             try
             {
-                if (_socket == null) return;
+                if (_socket == null)
+                {
+                    Console.WriteLine("returned because of null socket");
+                    return;
+                }
 
-                var bytesRead = _socket.EndReceive(ar);
-
+                var bytesRead = _socket.EndReceive(ar, out var errorCode);
+                if (errorCode != SocketError.Success)
+                {
+                    Console.WriteLine("Problem found");
+                    return;
+                }
                 if (bytesRead <= 0)
                 {
                     Close();

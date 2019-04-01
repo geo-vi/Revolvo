@@ -33,6 +33,7 @@
             this.mapTimer = new System.Windows.Forms.Timer(this.components);
             this.logoRotation = new System.Windows.Forms.Timer(this.components);
             this.header = new System.Windows.Forms.Panel();
+            this.openMenu = new System.Windows.Forms.Button();
             this.helpBttn = new System.Windows.Forms.Button();
             this.exitBttn = new System.Windows.Forms.Button();
             this.title = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             // map
             // 
             this.map.BackColor = System.Drawing.Color.Black;
+            this.map.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.map.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map.Location = new System.Drawing.Point(0, 31);
             this.map.Name = "map";
@@ -51,6 +53,7 @@
             this.map.TabIndex = 0;
             this.map.TabStop = false;
             this.map.Paint += new System.Windows.Forms.PaintEventHandler(this.PaintMap);
+            this.map.MouseClick += new System.Windows.Forms.MouseEventHandler(this.map_MouseClick);
             // 
             // mapTimer
             // 
@@ -66,6 +69,7 @@
             // header
             // 
             this.header.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
+            this.header.Controls.Add(this.openMenu);
             this.header.Controls.Add(this.helpBttn);
             this.header.Controls.Add(this.exitBttn);
             this.header.Controls.Add(this.title);
@@ -75,6 +79,22 @@
             this.header.Size = new System.Drawing.Size(400, 31);
             this.header.TabIndex = 1;
             this.header.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveWindow);
+            // 
+            // openMenu
+            // 
+            this.openMenu.FlatAppearance.BorderSize = 0;
+            this.openMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.openMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.openMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.openMenu.ForeColor = System.Drawing.Color.White;
+            this.openMenu.Location = new System.Drawing.Point(309, 2);
+            this.openMenu.Name = "openMenu";
+            this.openMenu.Size = new System.Drawing.Size(21, 28);
+            this.openMenu.TabIndex = 3;
+            this.openMenu.TabStop = false;
+            this.openMenu.Text = ">";
+            this.openMenu.UseVisualStyleBackColor = true;
+            this.openMenu.Click += new System.EventHandler(this.openMenu_Click);
             // 
             // helpBttn
             // 
@@ -154,6 +174,7 @@
         private System.Windows.Forms.Label title;
         private System.Windows.Forms.Button exitBttn;
         private System.Windows.Forms.Button helpBttn;
+        private System.Windows.Forms.Button openMenu;
     }
 }
 

@@ -13,13 +13,5 @@
             playerId = parser.readInt();
             sessionId = parser.readUTF();
         }
-
-        public static byte[] write(int playerId, string sessionId)
-        {
-            var cmd = new ByteArray(ID);
-            cmd.Integer(playerId);
-            cmd.UTF(sessionId);
-            return cmd.ToByteArray();
-        }
     }
 }

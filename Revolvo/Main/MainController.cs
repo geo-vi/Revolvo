@@ -9,6 +9,10 @@ using Revolvo.Main.global_objects;
 using Revolvo.Bot.managers;
 using RevolvoCore.Encryption;
 using System.Threading;
+using Revolvo.Bot.netty;
+using Revolvo.Bot.netty.packet;
+using Revolvo.Bot.objects;
+using Revolvo.Networking;
 using Revolvo.Networking.local_servers;
 
 namespace Revolvo.Main
@@ -33,12 +37,16 @@ namespace Revolvo.Main
         public string SessionId { get; set; }
         public int UserId { get; set; }
 
-        public User User;
+        public UserSession Session = new UserSession();
+
+        public PlayerInstance Player;
 
         public void Init()
         {
+            Packet.Handler = new Handler();
             // Proxy to decrypt DO https
             _proxy = new XProxy(true);
+            //_proxy.ProxyFilters.Add(new MainFilter()); for uberorbit only
             _proxy.ProxyFilters.Add(new MapsFilter());
             _proxy.ProxyFilters.Add(new InternalMapFilter());
             _proxy.Start();
@@ -50,7 +58,7 @@ namespace Revolvo.Main
 
         private void InitiateConnection()
         {
-            new PolicyServer(Defaults.DEFAULT_POLICY_PORT);
+            new PolicyServer();
             //while (StorageManager.Spacemaps.Count != MapId || MapId == 0) {  }
             //var server = new Main.global_objects.IServer(StorageManager.Spacemaps[MapId].IP, 843, true);
             //server.Connected += (s, e) => User = new User(new Main.global_objects.IClient(843, true), server);

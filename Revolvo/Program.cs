@@ -8,6 +8,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Revolvo.Utils;
 
 namespace Revolvo
 {
@@ -42,8 +43,6 @@ namespace Revolvo
 
         private static void CurrentDomainOnFirstChanceException(object sender, FirstChanceExceptionEventArgs e)
         {
-            Debug.WriteLine(e.Exception.Message);
-            Debug.WriteLine(e.Exception.StackTrace);
         }
     }
 }

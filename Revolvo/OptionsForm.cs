@@ -42,5 +42,10 @@ namespace Revolvo
         {
             Properties.Visuals.SHOWING_LOG = showingLog.Checked;
         }
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            (parentForm as MainForm).openMenu_Click(sender, e);
+        }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-
-namespace RevolvoCore.Commands
+﻿namespace RevolvoCore.Commands
 {
     public class LegacyModule
     {
         public const short ID = 29052;
-
-        public event EventHandler Received;
 
         public string message;
         public void readCommand(byte[] bytes)
@@ -15,11 +11,11 @@ namespace RevolvoCore.Commands
             message = parser.readUTF();
         }
 
-        public static byte[] write(string message)
+        public static Command write(string message)
         {
             var cmd = new ByteArray(ID);
             cmd.UTF(message);
-            return cmd.ToByteArray();
+            return new Command(cmd.ToByteArray(), false);
         }
     }
 }

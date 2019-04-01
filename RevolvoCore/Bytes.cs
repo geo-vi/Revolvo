@@ -152,7 +152,7 @@ namespace RevolvoCore
         }
 
         // Reads the next float from the byteArray (4 bytes)
-        public double readFloat()
+        public float readFloat()
         {
             var value = BitConverter.ToSingle(new byte[] { byteArray[byteCounter + 3], byteArray[byteCounter + 2], byteArray[byteCounter + 1], byteArray[byteCounter] }, 0);
             byteCounter += 4;
