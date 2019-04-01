@@ -21,8 +21,7 @@ namespace Revolvo.Networking.netty.policy
         protected override async void ChannelRead0(IChannelHandlerContext ctx, string msg)
         {
             var policyClient = new PolicyClient(_server);
-            var connect = policyClient.Connect();
-            Task.WaitAll(connect);
+            await policyClient.Connect();
             await policyClient.Write(msg);
         }
     }

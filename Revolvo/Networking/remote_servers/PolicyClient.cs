@@ -59,12 +59,6 @@ namespace Revolvo.Networking.remote_servers
             {
                 Console.WriteLine("Failed writing");
             }
-            finally
-            {
-                await _channel.CloseAsync();
-                await _threadGroup.ShutdownGracefullyAsync();
-                Console.WriteLine("Closed and shutdown");
-            }
         }
     }
 }

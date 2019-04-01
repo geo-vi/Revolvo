@@ -54,5 +54,12 @@ namespace Revolvo.Networking.local_servers
 
             }
         }
+
+        public void Close()
+        {
+            _channel.CloseAsync();
+            _threadGroup.ShutdownGracefullyAsync();
+            Console.WriteLine("CLOSED");
+        }
     }
 }
