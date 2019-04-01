@@ -30,7 +30,7 @@ namespace Revolvo.Networking.remote_servers
             Server = server;
         }
 
-        public async void Connect()
+        public async Task Connect()
         {
             //TODO: Connect
             var ip = StorageManager.GetIP();
@@ -49,7 +49,7 @@ namespace Revolvo.Networking.remote_servers
             _channel = await bootstrap.ConnectAsync(ip, Defaults.DEFAULT_POLICY_PORT);
         }
 
-        public async void Write(string content)
+        public async Task Write(string content)
         {
             try
             {

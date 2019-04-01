@@ -18,11 +18,12 @@ namespace Revolvo.Networking.netty.policy
             _server = server;
         }
 
-        protected override void ChannelRead0(IChannelHandlerContext ctx, string msg)
+        protected override async void ChannelRead0(IChannelHandlerContext ctx, string msg)
         {
             var policyClient = new PolicyClient(_server);
-            policyClient.Connect();
-            policyClient.Write(msg);
+            var connect = policyClient.Connect();
+            Task.WaitAll(connect);
+            await policyClient.Write(msg);
         }
     }
 }
