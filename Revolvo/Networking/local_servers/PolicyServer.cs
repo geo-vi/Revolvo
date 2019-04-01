@@ -12,37 +12,15 @@ namespace Revolvo.Networking.local_servers
 {
     class PolicyServer
     {
-        public XSocket XSocket { get; private set; }
-
         public PolicyServer()
         {
-            var xSocket = new XSocket(Defaults.DEFAULT_POLICY_PORT);
-
-            xSocket.OnAccept += XSocket_OnAccept;
-            xSocket.Listen();
+            //var xSocket = new XSocket(Defaults.DEFAULT_POLICY_PORT);
         }
 
-        private void XSocket_OnAccept(object sender, XSocketArgs e)
+        public void Write(string msg)
         {
-            XSocket = e.XSocket;
-            Console.WriteLine("Connection received [" + e.XSocket.IpEndPoint.Port + "]");
-            XSocket.OnReceive += XSocket_OnReceive;
-            XSocket.Read(true);
-        }
-
-        private void XSocket_OnReceive(object sender, EventArgs e)
-        {
-            var args = (StringArgs) e;
-            var packet = args.Packet;
-            Console.WriteLine(packet);
-            // that's the main.swf sending policy request
-            // now we must redirect that to the hosted server on univ3rse.com
-            // so here should come connect.
-            var policyClient = new PolicyClient(this);
-            policyClient.XSocket.OnConnected += delegate (object o, EventArgs eventArgs) {
-                policyClient.XSocket.Write(packet);
-            };
-            policyClient.Connect();
+            //TODO: Convert
+            throw new NotImplementedException();
         }
     }
 }

@@ -4,13 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
+using DotNetty.Transport.Channels.Sockets;
 using Revolvo.Bot.managers;
 using Revolvo.Bot.netty;
 using Revolvo.Main;
 using Revolvo.Main.global_objects;
 using Revolvo.Networking.local_servers;
+using Revolvo.Networking.netty.policy;
 using RevolvoCore.Networking;
 
 namespace Revolvo.Networking.remote_servers
@@ -18,6 +21,9 @@ namespace Revolvo.Networking.remote_servers
     class PolicyClient
     {
         private PolicyServer Server;
+
+        private MultithreadEventLoopGroup _threadGroup;
+        private IChannel _channel;
 
         public PolicyClient(PolicyServer server)
         {
@@ -29,10 +35,36 @@ namespace Revolvo.Networking.remote_servers
             //TODO: Connect
             var ip = StorageManager.GetIP();
             var bootstrap = new Bootstrap();
-            IChannel bootstrapChannel = await bootstrap.ConnectAsync(ip, Defaults.DEFAULT_POLICY_PORT);
+            var group = new MultithreadEventLoopGroup();
+            bootstrap
+                .Group(group)
+                .Channel<TcpSocketChannel>()
+                .Option(ChannelOption.TcpNodelay, true)
+                .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
+                {
+                    IChannelPipeline pipeline = channel.Pipeline;
+                    pipeline.AddLast(new StringEncoder(), new StringDecoder(), new PolicyReceivedHandler(Server));
+                }));
 
+            _channel = await bootstrap.ConnectAsync(ip, Defaults.DEFAULT_POLICY_PORT);
         }
 
-
+        public async void Write(string content)
+        {
+            try
+            {
+                await _channel.WriteAndFlushAsync(content);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed writing");
+            }
+            finally
+            {
+                await _channel.CloseAsync();
+                await _threadGroup.ShutdownGracefullyAsync();
+                Console.WriteLine("Closed and shutdown");
+            }
+        }
     }
 }
