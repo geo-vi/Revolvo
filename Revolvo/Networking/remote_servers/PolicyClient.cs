@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetty.Transport.Bootstrapping;
+using DotNetty.Transport.Channels;
 using Revolvo.Bot.managers;
 using Revolvo.Bot.netty;
 using Revolvo.Main;
@@ -14,40 +17,22 @@ namespace Revolvo.Networking.remote_servers
 {
     class PolicyClient
     {
-        public XSocket XSocket { get; }
-
         private PolicyServer Server;
 
         public PolicyClient(PolicyServer server)
         {
-            var ip = StorageManager.GetIP();
-            XSocket = new XSocket(ip, Defaults.DEFAULT_POLICY_PORT);
-            XSocket.OnReceive += XSocket_OnReceive;
-            XSocket.ConnectionClosedEvent += XSocket_ConnectionClosedEvent;
             Server = server;
         }
 
-        public void Connect()
+        public async void Connect()
         {
-            XSocket.Connect();
-            XSocket.Read(true);
-        }
-
-        private void XSocket_ConnectionClosedEvent(object sender, EventArgs e)
-        {
+            //TODO: Connect
+            var ip = StorageManager.GetIP();
+            var bootstrap = new Bootstrap();
+            IChannel bootstrapChannel = await bootstrap.ConnectAsync(ip, Defaults.DEFAULT_POLICY_PORT);
 
         }
 
-        private void XSocket_OnReceive(object sender, EventArgs e)
-        {
-            MainController.Instance.Session.GameServer = new GameServer();
-            var args = (StringArgs)e;
-            var packet = args.Packet;
-            Server.XSocket.Write(packet);
-            Console.WriteLine(packet);
-            Server.XSocket.Close();
-            XSocket.Close();
-            //open the gameserver now.
-        }
+
     }
 }
