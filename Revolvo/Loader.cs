@@ -31,70 +31,13 @@ namespace Revolvo
         /// </summary>
         public Image Revolvo => RevolvoImg.ScaleImage(Properties.Resources.icon, 115, 115);
 
-        private void DownloadSWF()
-        {
-            Console.WriteLine("Downloading main.swf");
-            WebClient client = new WebClient();
-            client.DownloadProgressChanged += Client_DownloadProgressChanged;
-            client.DownloadFileCompleted += (o, e) => 
-            {
-                Console.WriteLine("Download completed.");
-                ChecksumSWF();
-            };
-            client.DownloadFileAsync(new Uri("http://play.univ3rse.com/spacemap/main.swf"), Directory.GetCurrentDirectory() + "/main.swf");
-        }
-
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            double bytesIn = double.Parse(e.BytesReceived.ToString());
-            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-            double percentage = bytesIn / totalBytes * 100;
-            Console.WriteLine("Completed %: " + percentage);
-        }
-
-        private async void ChecksumSWF()
-        {
-            //var swf = Directory.GetCurrentDirectory() + "/main.swf";
-            //var hash = MD5.Get(swf);
-            //var file = new FileInfo(swf);
-            //if (file.Length == 0)
-            //{
-            //    Console.WriteLine("Failed to download swf");
-            //    File.Delete(swf);
-            //    for (int i= 5; i != 0; i--)
-            //    {
-            //        Console.WriteLine("Closing in " + i);
-            //        await Task.Delay(1000);
-            //    }
-            //    Close();
-            //    return;
-            //}
-
-            //if (hash == RevolvoCore.Properties.Core.SUPPORTED_MD5_VER)
-            //{
-                MainController.Instance.Init();
-                Console.WriteLine("Waiting for MapRevolution");
-            //}
-            //else Console.WriteLine("Please wait for the update to get confirmed");
-            //File.Delete(swf);
-        }
-
-        public bool Initiated = false;
-
         private void baseTimer_Tick(object sender, EventArgs e)
         {
-            if (!Initiated)
-            {
-                DownloadSWF();
-                Initiated = true;
-            }
-            if (MainController.Instance.MapId != 0)
-            {
-                var mainForm = new MainForm();
-                mainForm.Show();
-                Hide();
-                baseTimer.Enabled = false;
-            }
+            var mainForm = new MainForm();
+            mainForm.Show();
+            Hide();
+            baseTimer.Enabled = false;
+
             if (Output.Log.Count > 0)
                 loadingProgress.Text = Output.Log.LastOrDefault().Text;
 
@@ -135,7 +78,7 @@ namespace Revolvo
 
         private void Loader_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainController.Instance.CloseProxy();
+            
         }
 
         private void Loader_MouseDown(object sender, MouseEventArgs e)

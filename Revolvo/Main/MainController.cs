@@ -23,11 +23,6 @@ namespace Revolvo.Main
         /// </summary>
         public static MainController Instance { get; } = new MainController();
 
-        /// <summary>
-        /// Main proxy. Used to replace maps.php mainly
-        /// </summary>
-        private XProxy _proxy;
-
         public int MapId { get; set; }
         public string SessionId { get; set; }
         public int UserId { get; set; }
@@ -36,31 +31,15 @@ namespace Revolvo.Main
 
         public void Init()
         {
-            // Proxy to decrypt DO https
-            _proxy = new XProxy(true);
-            _proxy.ProxyFilters.Add(new MapsFilter());
-            _proxy.ProxyFilters.Add(new InternalMapFilter());
-            _proxy.Start();
-
             // Gets the client connection
             Task.Run(new Action(InitiateConnection));
         }
 
         private void InitiateConnection()
         {
-            // Wait for MapId
-            while (StorageManager.Spacemaps.Count != MapId || MapId == 0) { }
-
             // Init Policy protocol and game server
-            var server = new Main.global_objects.IServer(StorageManager.Spacemaps[MapId].IP, Defaults.POLICY_PORT, true);
-            server.Connected += (s, e) => User = new User(new Main.global_objects.IClient(Defaults.POLICY_PORT, true), server);
+            var server = new Main.global_objects.IServer(Defaults.HOST_IP, Defaults.POLICY_PORT, true);
             server.Connect();
-        }
-
-        public void CloseProxy()
-        {
-            if (_proxy != null)
-                _proxy.Stop();
         }
     }
 }

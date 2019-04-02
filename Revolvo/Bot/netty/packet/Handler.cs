@@ -37,57 +37,49 @@ namespace Revolvo.Bot.netty.packet
             var parser = new ByteParser(bytes);
             Console.WriteLine($"Received parser id ->{parser.CMD_ID}");
             Console.WriteLine($"Received from Server ->{CommandFinder.Find(parser.CMD_ID)}");
-            switch (parser.CMD_ID)
-            {
-                case ShipInitializationCommand.ID:
-                    
+            switch (parser.CMD_ID) {
+                case 23508:
+                    Console.WriteLine("Received UserKeyBindingsUpdate");
+                    var times = parser.readShort();
+                    Console.WriteLine("Times: " + times);
                     break;
             }
 
-            MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, bytes);
+            //MainController.Instance.User.SendPacket(bytes);
 
         }
 
         public void HandleClientCommand(byte[] bytes)
         {
             var parser = new ByteParser(bytes);
-            Console.WriteLine($"Received parser id ->{parser.CMD_ID}");
-            Console.WriteLine($"Received from Client ->{CommandFinder.Find(parser.CMD_ID)}");
+            Console.WriteLine($"Sending parser id ->{parser.CMD_ID}");
+            Console.WriteLine($"Sending to Server ->{CommandFinder.Find(parser.CMD_ID)}");
 
-            if (parser.CMD_ID == 666)
-            {
-                MainForm.Connected = true;
-                MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, ShipInitializationCommand.write(2103, "devsnowy", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, true, 1, 1, 1, 1, 1, 1, 1, "", 1, false, false, new List<VisualModifierCommand>()));
-                Console.WriteLine("STAY ALIIIIVE");
-            }
-
-            MainController.Instance.User.RedirectPacket(PacketDestinations.CLIENT_TO_SERVER, bytes);
+            //if (parser.CMD_ID == 666)
+            //{
+            //    MainForm.Connected = true;
+            //    MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, ShipInitializationCommand.write(2103, "devsnowy", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, true, 1, 1, 1, 1, 1, 1, 1, "", 1, false, false, new List<VisualModifierCommand>()));
+            //    Console.WriteLine("STAY ALIIIIVE");
+            //}
         }
         
         public void HandlePolicyServer(string packet)
         {
-            Console.WriteLine("PolicyServer>" + packet);
-            MainController.Instance.User.RedirectPacket(PacketDestinations.SERVER_TO_CLIENT, packet);
-            MainController.Instance.User.Close(User.Senders.CLIENT);
-            MainController.Instance.User.Close(User.Senders.SERVER);
+            Console.WriteLine("Policy Server message received:");
+            Console.WriteLine(packet);
             InitiateGame();
-        }
-
-        public void HandlePolicyClient(string packet)
-        {
-            Console.WriteLine("PolicyClient>" + packet);
-            MainController.Instance.User.RedirectPacket(PacketDestinations.CLIENT_TO_SERVER, packet);
         }
 
         private void InitiateGame()
         {
-            var client = new IClient(Defaults.GAME_PORT);
-            var server = new IServer(Bot.managers.StorageManager.Spacemaps[MainController.Instance.MapId].IP, Defaults.GAME_PORT);
-            server.Connected += (s, e) => MainController.Instance.User = new User(client, server);
+            Console.WriteLine("Connecting to the game server...");
+            var server = new IServer(Defaults.HOST_IP, Defaults.GAME_PORT, false);
+            server.Connected += (s, e) =>
+            {
+                Console.WriteLine("Keeping client alive, waiting for incoming connection.");
+                MainController.Instance.User.SendPacket(VersionRequest.write(2199, "06qt7tmo0jlp97jqlcstpe1muj"));
+            };
             server.Connect();
-            Console.WriteLine("Emulator started");
-            server.XSocket.Write(VersionRequest.write(2103, "3j064e4jt572hqoqbmti6kahti"));
-            Console.WriteLine("Keeping client alive, waiting for incoming connection.");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Revolvo
         public void InitializeBot()
         {
             LogoRotation.SetLogo(Revolvo);
-            //            map.ImageLocation = "http://darkorbit.bg/spacemap/graphics/minimaps/minimap-" + MainController.Instance.MapId + "-700.jpg";
+            MainController.Instance.Init();
         }
 
         /// <summary>
@@ -36,7 +36,6 @@ namespace Revolvo
         public Image Revolvo => RevolvoImg.ScaleImage(Properties.Resources.icon, 83, 85);
 
         #region Temp variables
-        public static bool Connected = false;
         #endregion
 
         #region Map
@@ -46,13 +45,6 @@ namespace Revolvo
                 Draw.Log(e);
             if (CommandMode)
                 Draw.Command(RecordedText, e);
-            if (!Connected)
-            {
-                Draw.Logo(LogoRotation.Logo, e);
-                Draw.MapText("PENDING", e);
-                return;
-            }
-            //TODO:: ADD
         }
 
         private void TickMap(object sender, EventArgs e)
@@ -96,12 +88,12 @@ namespace Revolvo
 
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            MainController.Instance.CloseProxy();
+           
         }
 
         private void OnFormClosed(object s, EventArgs e)
         {
-            MainController.Instance.CloseProxy();
+            Environment.Exit(0);
         }
 
         private void MoveWindow(object sender, MouseEventArgs e)
@@ -200,6 +192,11 @@ namespace Revolvo
         #endregion
 
         private void map_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void header_Paint(object sender, PaintEventArgs e)
         {
 
         }

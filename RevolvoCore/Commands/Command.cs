@@ -8,11 +8,14 @@ namespace RevolvoCore.Commands
 {
     public class Command
     {
-        public event EventHandler Received;
+        public byte[] Bytes { get; }
 
-        public void Execute()
+        public bool IsNewClient { get; }
+
+        public Command(byte[] bytes, bool isNewClient)
         {
-            Received.Invoke(this, EventArgs.Empty);
+            Bytes = bytes;
+            IsNewClient = isNewClient;
         }
     }
 }

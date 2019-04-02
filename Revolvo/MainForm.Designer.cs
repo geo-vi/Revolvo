@@ -75,6 +75,7 @@
             this.header.Name = "header";
             this.header.Size = new System.Drawing.Size(400, 31);
             this.header.TabIndex = 1;
+            this.header.Paint += new System.Windows.Forms.PaintEventHandler(this.header_Paint);
             this.header.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveWindow);
             // 
             // helpBttn

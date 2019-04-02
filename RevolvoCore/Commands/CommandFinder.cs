@@ -8,9 +8,11 @@ namespace RevolvoCore.Commands
 {
     public class CommandFinder
     {
-        private static readonly Dictionary<int, Command> Commands = new Dictionary<int, Command>
+        private static readonly Dictionary<int, object> Commands = new Dictionary<int, object>
         {
-            {ShipInitializationCommand.ID, new ShipInitializationCommand() }
+             { UserKeyBindingsUpdate.ID, new UserKeyBindingsUpdate() },
+             { AddOreCommand.ID, new AddOreCommand() },
+             { LegacyModule.ID, new LegacyModule() },
         };
 
         public static string Find(int id)
@@ -18,7 +20,8 @@ namespace RevolvoCore.Commands
             if (Commands.ContainsKey(id))
             {
                 var cmd = Commands[id];
-                cmd.Execute();
+                //cmd.Execute();
+                //TODO: execute and dictionary
                 return cmd.GetType().Name;
             }
             return "";

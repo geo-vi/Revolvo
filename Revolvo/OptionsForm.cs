@@ -42,5 +42,10 @@ namespace Revolvo
         {
             Properties.Visuals.SHOWING_LOG = showingLog.Checked;
         }
+
+        private void miscBox_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

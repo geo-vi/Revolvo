@@ -11,46 +11,30 @@ namespace Revolvo.Main.global_objects
     {
         public enum Senders
         {
-            CLIENT,
             SERVER
         }
 
-        private IClient Client { get; }
-
         private IServer Server { get; }
 
-        public User(IClient client, IServer server)
+        public User(IServer server)
         {
-            Client = client;
             Server = server;
         }
 
-        public void RedirectPacket(PacketDestinations destination, byte[] bytes)
+        public void SendPacket(byte[] bytes)
         {
-            if (destination == PacketDestinations.CLIENT_TO_SERVER)
-            {
-                Console.WriteLine("CLIENT->SERVER");
-                Server.XSocket.Write(bytes);
-            }
-            else
-            {
-                Console.WriteLine("SERVER->CLIENT");
-                Client.XSocket.Write(bytes);
-            }
+            Console.WriteLine("Sending packet server.");
+            Server.XSocket.Write(bytes);
         }
 
-        public void RedirectPacket(PacketDestinations destination, string content)
+        public void SendPacket(string content)
         {
-            if (destination == PacketDestinations.CLIENT_TO_SERVER)
-                Server.XSocket.Write(content);
-            else Client.XSocket.Write(content);
+            Server.XSocket.Write(content);
         }
 
         public void Close(Senders sender)
         {
-            if (sender == Senders.CLIENT)
-                Client.XSocket.Close();
-            else Server.XSocket.Close();
+            Server.XSocket.Close();
         }
     }
 }

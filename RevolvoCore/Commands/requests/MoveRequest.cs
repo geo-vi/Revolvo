@@ -1,6 +1,6 @@
 ﻿namespace RevolvoCore.Commands.requests
 {
-    class MoveRequest
+    public class MoveRequest
     {
         public const short ID = 6417;
 
@@ -17,6 +17,16 @@
             this.targetX = parser.readInt();
             this.positionY = parser.readInt();
 
+        }
+
+        public static Command write(int positionX, int positionY, int targetX,int targetY)
+        {
+            var cmd = new ByteArray(ID);
+            cmd.Integer(positionX);
+            cmd.Integer(targetY);
+            cmd.Integer(targetX);
+            cmd.Integer(positionY);
+            return new Command(cmd.ToByteArray(), false);
         }
     }
 }
